@@ -1,32 +1,51 @@
 user = {}
 appointments = {}
+id = 1
 
 def signUp():
+    print("\n====================")
+    print("   ^^ SIGN UP ^^    ")
+    print("====================")
     username = input("Enter a username: ")
+    print("====================")
     password = input("Enter a password: ")
-
+    print("====================")
     user[username] = password
     print("Sign up successfully")
+    print("====================")
     return
 
 def signIn():
     while True:
+        print("\n====================")
+        print("   ^^ SIGN IN ^^    ")
+        print("====================")
         username = input("Enter a username: ")
+        print("====================")
         password = input("Enter a password: ")
+        print("====================")
 
         if username == "admin" and password == "1234":
             print("Logging in as ADMIN...")
+            print("====================")
             adminDashboard()
+            return
         elif username not in user:
             print("User not found!")
+            print("====================")
         elif user[username] == password:
             print(f"Login Successfully as {username}")
+            print("====================")
             userDashboard(username)
+            return
         else:
             print("Incorrect Password")
+            print("====================")
 
 def userDashboard(username):
     while True:
+        print("\n====================")
+        print(f" ^^ Welcome {username} ^^")
         print("====================")
         print("1. Book Appointment\n2. Check Appointment\n3. Cancel Appointment\n4. Logout")
         print("====================")
@@ -50,8 +69,31 @@ def userDashboard(username):
 def adminDashboard():
     print("====================")
     print("1. Check Appointment\n2. logout")
+    print("====================")
 
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        for appointment in appointments.values():
+            print(f"{appointment["id"]}. {appointment["lastName"]}, {appointment["firstName"]}, {appointment["middleName"]}")
+        
+        
+        IDsearch = int(input("Enter your choice: "))
+        for appointmentData in appointments.values():
+            if appointmentData["id"] == IDsearch:
+                print(f"FULL NAME: {appointmentData["firstName"]} {appointmentData["middleName"]} {appointmentData["lastName"]}")
+                print(f"AGE: {appointmentData["age"]}")
+                print(f"SEX: {appointmentData["sex"]}")
+                print(f"ADDRESS: {appointmentData["address"]}")
+                print(f"MOBILE #: {appointmentData["mobileNum"]}")
+                print(f"CONCERN: {appointmentData["concern"]}")
+                print(f"AGE: {appointmentData["age"]}")
+            else:
+                 print("No appointments yet")
+        
+           
+           
 def bookAppointment(username):
+    global id
     if username in appointments:
         print("You have book an appointment already: ")
         return
@@ -67,6 +109,8 @@ def bookAppointment(username):
     print("====================")
     age = int(input("Enter your age name: "))
     print("====================")
+    sex = input("Enter your sex (female or male): ")
+    print("====================")
     address = input("Enter your address: ")
     print("====================")
     mobileNum = int(input("Enter your mobile #: "))
@@ -75,21 +119,25 @@ def bookAppointment(username):
     print("====================")
 
     appointments[username] = {
+        "id": id,
         "firstName": firstName,
         "lastName": lastName,
         "middleName": middleName,
         "age": age,
+        "sex": sex,
         "address": address,
         "mobileNum": mobileNum,
         "concern": concern
     }
 
-    print("Appointment booked successfully: ")
+    print(f"Appointment booked successfully: Your ID is {id} ")
+    id += 1
+    print("====================")
 
 
 
 while True:
-    print("====================")
+    print("\n====================")
     print("1. SignUp\n2. SignIn\n3. Exit")
     print("====================")
 
