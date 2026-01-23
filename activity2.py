@@ -16,3 +16,5 @@ print("(quiz + lab) / 2 > midExam: ", (quiz + lExercise) / 2 > midExam )
 print("finalExam >= midterm: ", finalExam >= midExam)
 print("quiz != lExercise: ", quiz != lExercise )
 print("not (finalGrade < 75): ", not(finalGrade < 75))
+
+

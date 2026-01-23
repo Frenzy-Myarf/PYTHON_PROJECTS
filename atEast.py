@@ -62,9 +62,22 @@ def userDashboard(username):
             if choice == 1:
                 bookAppointment(username)
             elif choice == 2:
-                pass
+                IDSeach = int(input("Enter id no. to view details: "))
+
+                for appointment in appointments.values():
+                    if appointment['id'] == IDSeach:
+                        print(f"FULL NAME: {appointment['firstName']} {appointment['middleName']} {appointment['lastName']}")
+                        print(f"AGE: {appointment['age']}")
+                        print(f"SEX: {appointment['sex']}")
+                        print(f"ADDRESS: {appointment['address']}")
+                        print(f"CONCERN: {appointment['concern']}")
+                        print(f"MOBILE #: {appointment['mobileNum']}")
+                else:
+                    print("No id found")
+
             elif choice == 3:
                 pass
+                
             elif choice == 4:
                 break
             else:
@@ -99,7 +112,6 @@ def adminDashboard():
                     print(f"ADDRESS: {appointmentData['address']}")
                     print(f"MOBILE #: {appointmentData['mobileNum']}")
                     print(f"CONCERN: {appointmentData['concern']}")
-                    print(f"AGE: {appointmentData['age']}")
                     break
             else:
                 print("Id not found")
@@ -172,6 +184,4 @@ while True:
     
     except ValueError:
         print("Only numbers should be type!")
-
-
 
