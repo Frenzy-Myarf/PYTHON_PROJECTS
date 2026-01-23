@@ -1,7 +1,10 @@
+
+# Global Variable
 user = {}
 appointments = {}
 id = 1
 
+# Sign Up ^^
 def signUp():
     print("\n====================")
     print("   ^^ SIGN UP ^^    ")
@@ -12,9 +15,10 @@ def signUp():
     print("====================")
     user[username] = password
     print("Sign up successfully")
-    print("====================")
+    print("====================")    
     return
 
+# Sign In ^^
 def signIn():
     while True:
         print("\n====================")
@@ -33,6 +37,7 @@ def signIn():
         elif username not in user:
             print("User not found!")
             print("====================")
+            break
         elif user[username] == password:
             print(f"Login Successfully as {username}")
             print("====================")
@@ -42,6 +47,7 @@ def signIn():
             print("Incorrect Password")
             print("====================")
 
+# User Dashboard ^^
 def userDashboard(username):
     while True:
         print("\n====================")
@@ -66,32 +72,42 @@ def userDashboard(username):
         except ValueError:
             print("Only numbers should be type!")
 
+# Admin Dashboard ^^
 def adminDashboard():
-    print("====================")
-    print("1. Check Appointment\n2. logout")
-    print("====================")
+    while True:
+        print("====================")
+        print("1. Check Appointment\n2. logout")
+        print("====================")
 
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        for appointment in appointments.values():
-            print(f"{appointment["id"]}. {appointment["lastName"]}, {appointment["firstName"]}, {appointment["middleName"]}")
-        
-        
-        IDsearch = int(input("Enter your choice: "))
-        for appointmentData in appointments.values():
-            if appointmentData["id"] == IDsearch:
-                print(f"FULL NAME: {appointmentData["firstName"]} {appointmentData["middleName"]} {appointmentData["lastName"]}")
-                print(f"AGE: {appointmentData["age"]}")
-                print(f"SEX: {appointmentData["sex"]}")
-                print(f"ADDRESS: {appointmentData["address"]}")
-                print(f"MOBILE #: {appointmentData["mobileNum"]}")
-                print(f"CONCERN: {appointmentData["concern"]}")
-                print(f"AGE: {appointmentData["age"]}")
+        choice = int(input("Enter your choice: "))
+        if choice == 1:
+            if not appointments:
+                print("No appointments yet")
+                continue
+
+            for appointment in appointments.values():
+                print(f"{appointment['id']}. {appointment['lastName']}, {appointment['firstName']}, {appointment['middleName']}")
+            
+            
+            IDsearch = int(input("Enter ID number to view details: "))
+            
+            for appointmentData in appointments.values():
+                if appointmentData['id'] == IDsearch:
+                    print(f"FULL NAME: {appointmentData['firstName']} {appointmentData['middleName']} {appointmentData['lastName']}")
+                    print(f"AGE: {appointmentData['age']}")
+                    print(f"SEX: {appointmentData['sex']}")
+                    print(f"ADDRESS: {appointmentData['address']}")
+                    print(f"MOBILE #: {appointmentData['mobileNum']}")
+                    print(f"CONCERN: {appointmentData['concern']}")
+                    print(f"AGE: {appointmentData['age']}")
+                    break
             else:
-                 print("No appointments yet")
-        
-           
-           
+                print("Id not found")
+
+        elif choice == 2:
+            break
+
+# Book Appointment ^^          
 def bookAppointment(username):
     global id
     if username in appointments:
@@ -135,7 +151,7 @@ def bookAppointment(username):
     print("====================")
 
 
-
+# Main Function
 while True:
     print("\n====================")
     print("1. SignUp\n2. SignIn\n3. Exit")
