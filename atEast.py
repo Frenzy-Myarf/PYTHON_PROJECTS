@@ -1,13 +1,11 @@
 import time
+import bcrypt
+from pwinput import pwinput
 from atEastSupabase import supabase
 
-
-# Global Variable
-#user = {}
-#appointments = {}
-#id = 1
-
-
+#Bug found
+#1. Admin should not be able to see rejected appointments using id
+#2. User when appointments is rejected action 2. back kicks user to userdashboard
 
 # Sign Up ^^
 def signUp():
@@ -16,7 +14,7 @@ def signUp():
     print("=" * 50)
     username = input("Enter a username: ")
     print("=" * 50)
-    password = input("Enter a password: ")
+    password = pwinput("Enter a password: ")
     print("=" * 50)
 
     existingUser = supabase.table("users") \
@@ -30,10 +28,11 @@ def signUp():
         print("=" * 50)
         return
     
-    
+    hashPass = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
     supabase.table("users").insert({
         "username": username, 
-        "password": password
+        "password": hashPass
     }).execute()
     print("\n" + "=" * 50)
     print(f"Sign up successfully ^^ as (•‿•) {username}")
@@ -48,7 +47,7 @@ def signIn():
         print("=" * 50)
         username = input("Enter a username: ")
         print("=" * 50)
-        password = input("Enter a password: ")
+        password = pwinput("Enter a password: ")
         print("=" * 50)
 
         if username == "admin" and password == "1234":
@@ -68,7 +67,8 @@ def signIn():
             print("=" * 50)
             return
         
-        if validUser.data[0]["password"] == password:
+        hashPass = validUser.data[0]["password"]
+        if bcrypt.checkpw(password.encode(), hashPass.encode()):
             print("\n" + "=" * 50)
             time.sleep(1)
             print(f"^^ Logging in as {username} (•‿•)")
@@ -111,7 +111,7 @@ def userDashboard(username):
 
                 if not appointmentById.data:
                     print("\n" + "=" * 50)
-                    print("Appointment ID does not exist.")
+                    print("Appointment ID does not exist ^^".center(50))
                     print("=" * 50)
                     continue
         
@@ -143,7 +143,6 @@ def userDashboard(username):
                     action = int(input("Enter action: "))
 
                     if action == 1:
-                        #del appointments[appointment]
                         supabase.table("appointments") \
                         .delete() \
                         .eq("id", IDSearch) \
@@ -154,16 +153,12 @@ def userDashboard(username):
                         print("Appointment deleted successfully (=^.^=)")
                         print("-" * 50)
                     else:
-                        return
+                        continue
 
             elif choice == 3:
                 print("\n" + "=" * 50)
                 print("^^ Cancel Appointment ^^".center(50))
                 print("=" * 50)
-                #if username not in appointments:
-                #    print("\n" + "=" * 50)
-                #    print("No appointments yet! ^^".center(50))
-                #    print("=" * 50)
                 
                 IDSearch = int(input("Enter your Appointment ID to cancel ^^: "))
                 print("=" * 50)
@@ -175,7 +170,7 @@ def userDashboard(username):
                 
                 if not appointmentById.data:
                     print("\n" + "=" * 50)
-                    print("Sadly you have no appointments yet ^^")
+                    print("Sadly you have no appointments yet ^^".center(50))
                     print("=" * 50)
                     continue
                 
@@ -191,13 +186,14 @@ def userDashboard(username):
 
                 if appointment['status'] == "accepted":
                     print("\n" + "=" * 50)
-                    print("Cannot be cancelled once accepted! ^^")
+                    print("Cannot be cancelled once accepted! ^^".center(50))
                     print("=" * 50)
                     continue
                 
                 if appointment['status'] == "rejected":
                     print("\n" + "=" * 50)
-                    print("Your appointment is already been rejected (=^.^=) delete it instead")
+                    print("Your appointment is already been rejected (=^.^=)".center(50))
+                    print("delete it instead".center(50))
                     print("=" * 50)
                     
                     action = int(input("Enter action: "))
@@ -212,8 +208,9 @@ def userDashboard(username):
                         print("\n" + "-" * 50)
                         print("Appointment deleted successfully (=^.^=)")
                         print("-" * 50)
+                        continue
                     else:
-                        return
+                        continue
                 
                 supabase.table("appointments") \
                         .delete() \
@@ -239,7 +236,7 @@ def userDashboard(username):
             print("Only numbers should be type! (=^.^=)")
             print("=" * 50)
 
-# Update Status shortcut
+# Update Status ^^
 def updateStatus(appointmentID, newStatus):
     supabase.table("appointments") \
     .update({"status": newStatus}) \
@@ -283,7 +280,7 @@ def adminDashboard():
                     print("-" * 50)
                     print(f"{appointment['id']}. {appointment['lastname']}, {appointment['firstname']}, {appointment['middlename']} - > {appointment['status']}")
                 
-            
+            print("\n" + "=" * 50)
             IDsearch = int(input("Enter ID number to view details: "))
             print("=" * 50)
             
@@ -296,10 +293,15 @@ def adminDashboard():
                 print("\n" + "=" * 50)
                 print("Appointment not found! ^^".center(50))
                 print("=" * 50)
-                return
+                continue
             
             appointmentData = adminIdSearch.data[0]
-
+            if appointmentData['status'] == "rejected":
+                print("\n" + "=" * 50)
+                print("^^ You already rejected this appointment ^^".center(50))
+                print("=" * 50)
+                continue
+            
             print("\n" + "-" * 50)
             print(f"STATUS: {appointmentData['status']}")
             print(f"FULL NAME: {appointmentData['firstname']} {appointmentData['middlename']} {appointmentData['lastname']}")
@@ -337,7 +339,7 @@ def adminDashboard():
                     
                     print("\n" + "=" * 50)
                     print("1. Mark As Done".center(50))
-                    print("2. Leave it be".center(50))
+                    print("2. Leave it be".center(48))
                     print("=" * 50)
 
                     action = int(input("Enter action: "))
@@ -357,9 +359,7 @@ def adminDashboard():
                         continue
 
                     
-                #else:
-                #    print("Id not found! (=^.^=)")
-                #    print("=" * 50)
+                
 
         elif choice == 2:
             print("\n" + "=" * 50)
@@ -371,10 +371,6 @@ def adminDashboard():
 
 # Book Appointment ^^          
 def bookAppointment(username):
-    #global id
-    #if username in appointments:
-    #    print("You have book an appointment already: ")
-    #    return
 
     existing = supabase.table("appointments") \
     .select("id") \
