@@ -12,3 +12,5 @@ if finalGrade >= 90 and min(quiz, labExercise, midExam, finalExam) >= 80:
 else:
     print("not eligible")
 
+
+
