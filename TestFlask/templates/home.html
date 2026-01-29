@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="box">
+    <h1>this is homepage</h1>
+    <p>this is styled using css</p>
+    <img src="{{url_for('static', filename='images/dog.jpg')}}">
+</div>
+{% endblock %}
